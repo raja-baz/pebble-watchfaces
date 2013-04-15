@@ -14,12 +14,12 @@ Layer line_layer;
 
 
 void line_layer_update_callback(Layer *me, GContext* ctx) {
-  (void)me;
+    (void)me;
 
-  graphics_context_set_stroke_color(ctx, GColorWhite);
+    graphics_context_set_stroke_color(ctx, GColorWhite);
 
-  graphics_draw_line(ctx, GPoint(8, 97), GPoint(131, 97));
-  graphics_draw_line(ctx, GPoint(8, 98), GPoint(131, 98));
+    graphics_draw_line(ctx, GPoint(8, 97), GPoint(131, 97));
+    graphics_draw_line(ctx, GPoint(8, 98), GPoint(131, 98));
 
 }
 
@@ -37,9 +37,9 @@ void display_time(PblTm * tick_time) {
 
 
     if (clock_is_24h_style()) {
-	time_format = "%R";
+        time_format = "%R";
     } else {
-	time_format = "%I:%M";
+        time_format = "%I:%M";
     }
 
     string_format_time(time_text, sizeof(time_text), time_format, tick_time);
@@ -47,7 +47,7 @@ void display_time(PblTm * tick_time) {
     // Kludge to handle lack of non-padded hour format string
     // for twelve hour clock.
     if (!clock_is_24h_style() && (time_text[0] == '0')) {
-	memmove(time_text, &time_text[1], sizeof(time_text) - 1);
+        memmove(time_text, &time_text[1], sizeof(time_text) - 1);
     }
 
     text_layer_set_text(&text_time_layer, time_text);    
@@ -55,57 +55,57 @@ void display_time(PblTm * tick_time) {
 
 
 void handle_init(AppContextRef ctx) {
-  (void)ctx;
+    (void)ctx;
 
-  window_init(&window, "Simplicity");
-  window_stack_push(&window, true /* Animated */);
-  window_set_background_color(&window, GColorBlack);
+    window_init(&window, "Simplicity");
+    window_stack_push(&window, true /* Animated */);
+    window_set_background_color(&window, GColorBlack);
 
-  resource_init_current_app(&APP_RESOURCES);
-
-
-  text_layer_init(&text_date_layer, window.layer.frame);
-  text_layer_set_text_color(&text_date_layer, GColorWhite);
-  text_layer_set_background_color(&text_date_layer, GColorClear);
-  layer_set_frame(&text_date_layer.layer, GRect(8, 68, 144-8, 168-68));
-  text_layer_set_font(&text_date_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21)));
-  layer_add_child(&window.layer, &text_date_layer.layer);
+    resource_init_current_app(&APP_RESOURCES);
 
 
-  text_layer_init(&text_time_layer, window.layer.frame);
-  text_layer_set_text_color(&text_time_layer, GColorWhite);
-  text_layer_set_background_color(&text_time_layer, GColorClear);
-  layer_set_frame(&text_time_layer.layer, GRect(7, 92, 144-7, 168-92));
-  text_layer_set_font(&text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49)));
-  layer_add_child(&window.layer, &text_time_layer.layer);
+    text_layer_init(&text_date_layer, window.layer.frame);
+    text_layer_set_text_color(&text_date_layer, GColorWhite);
+    text_layer_set_background_color(&text_date_layer, GColorClear);
+    layer_set_frame(&text_date_layer.layer, GRect(8, 68, 144-8, 168-68));
+    text_layer_set_font(&text_date_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21)));
+    layer_add_child(&window.layer, &text_date_layer.layer);
 
 
-  layer_init(&line_layer, window.layer.frame);
-  line_layer.update_proc = &line_layer_update_callback;
-  layer_add_child(&window.layer, &line_layer);
+    text_layer_init(&text_time_layer, window.layer.frame);
+    text_layer_set_text_color(&text_time_layer, GColorWhite);
+    text_layer_set_background_color(&text_time_layer, GColorClear);
+    layer_set_frame(&text_time_layer.layer, GRect(7, 92, 144-7, 168-92));
+    text_layer_set_font(&text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49)));
+    layer_add_child(&window.layer, &text_time_layer.layer);
 
-  // Avoids a blank screen on watch start.
-  PblTm tick_time;
 
-  get_time(&tick_time);
-  display_time(&tick_time);
+    layer_init(&line_layer, window.layer.frame);
+    line_layer.update_proc = &line_layer_update_callback;
+    layer_add_child(&window.layer, &line_layer);
+
+    // Avoids a blank screen on watch start.
+    PblTm tick_time;
+
+    get_time(&tick_time);
+    display_time(&tick_time);
 }
 
 
 void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
-  (void)ctx;
-  display_time(t->tick_time);
+    (void)ctx;
+    display_time(t->tick_time);
 }
 
 void pbl_main(void *params) {
-  PebbleAppHandlers handlers = {
-    .init_handler = &handle_init,
+    PebbleAppHandlers handlers = {
+        .init_handler = &handle_init,
 
-    .tick_info = {
-      .tick_handler = &handle_minute_tick,
-      .tick_units = MINUTE_UNIT
-    }
+        .tick_info = {
+            .tick_handler = &handle_minute_tick,
+            .tick_units = MINUTE_UNIT
+        }
 
-  };
-  app_event_loop(params, &handlers);
+    };
+    app_event_loop(params, &handlers);
 }
