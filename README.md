@@ -1,4 +1,4 @@
-pebble-watchfaces
+Pebble Watchfaces
 =================
 
 So far I only have one watchface in here -- A modification to the simplicity watchface to better suit my needs
