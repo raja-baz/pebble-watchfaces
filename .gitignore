@@ -6,3 +6,5 @@ resources/wscript
 tools
 waf
 wscript
+build
+.*waf*
