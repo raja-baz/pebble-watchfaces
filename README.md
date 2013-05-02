@@ -1,8 +1,16 @@
 Pebble Watchfaces
 =================
 
-So far I only have one watchface in here -- A modification to the simplicity watchface to better suit my needs
+There are 2 watchfaces in this repo
 
-I like having an AM/PM display when I set my clock on 12-hr mode. Also,
-the delay between switching to the clock and the date/time appearing was
-really annoying. So I fixed that.
+## Simplicity 2
+
+A variation on the simplicity watchface that has an AM/PM display in
+12-hr mode. Also, removed the delay when first switching watch and
+before the time is actually displayed.
+
+## Fuzzy Time Arabic
+
+Exactly what the name says, except that the form of arabic it uses is
+actually the Lebanese way of telling time and it uses transliteration
+instead of an actual arabic font.
