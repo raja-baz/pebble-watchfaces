@@ -11,7 +11,7 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
-#define BUFFER_SIZE 86
+#define BUFFER_SIZE 40
 
 static struct CommonWordsData {
     TextLayer label;
