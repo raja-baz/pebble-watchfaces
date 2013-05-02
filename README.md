@@ -1,7 +1,9 @@
 Pebble Watchfaces
 =================
 
-There are 2 watchfaces in this repo
+[Pebble](http://getpebble.com/) is an e-paper watch that has
+programmable watchfaces. This repo contains my experiements or
+modifications to existing watchfaces.
 
 ## Simplicity 2
 
