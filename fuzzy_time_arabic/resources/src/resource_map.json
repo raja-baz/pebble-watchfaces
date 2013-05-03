@@ -10,8 +10,8 @@
 	},
 	{
 	    "type":"font",
-	    "defName":"FONT_GOTHAM_LIGHT_28",
-	    "file":"fonts/Gotham-Light.ttf"
+	    "defName":"FONT_GOTHAM_BOOK_28",
+	    "file":"fonts/Gotham-Book.ttf"
 	}
     ]
 }

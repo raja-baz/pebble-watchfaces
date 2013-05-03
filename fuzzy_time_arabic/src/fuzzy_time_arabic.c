@@ -107,7 +107,7 @@ static void handle_init(AppContextRef ctx) {
 
     window_set_background_color(&s_data.window, GColorBlack);
     GFont hours_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOLD_36));
-    GFont regular_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_LIGHT_28));
+    GFont regular_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOOK_28));
 
     int screen_width = s_data.window.layer.frame.size.w;
     text_layer_init(&s_data.hours, GRect(0, 5, screen_width, 45));
