@@ -1,11 +1,17 @@
 
-{"friendlyVersion": "VERSION",
- "versionDefName": "VERSION",
- "media": [
-	   {
-	    "type":"raw",
-	    "defName":"DUMMY",
-	    "file":"resource_map.json"
-	   }
-	  ]
+{
+    "friendlyVersion": "1.0",
+    "versionDefName": "FUZZY_TIME_ARABIC_RESOURCES",
+    "media": [
+	{
+	    "type":"font",
+	    "defName":"FONT_GOTHAM_BOLD_36",
+	    "file":"fonts/Gotham-Bold.ttf"
+	},
+	{
+	    "type":"font",
+	    "defName":"FONT_GOTHAM_LIGHT_28",
+	    "file":"fonts/Gotham-Light.ttf"
+	}
+    ]
 }

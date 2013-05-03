@@ -51,7 +51,6 @@ static struct CommonWordsData {
 } s_data;
 
 static void update_time(PblTm* t) {
-
     int fuzzy_hours = t->tm_hour;
     int fuzzy_minutes = ((t->tm_min + 2) / 5) * 5;
 
@@ -100,13 +99,15 @@ static void common_text_layer_init(TextLayer * layer, GFont font){
 static void handle_init(AppContextRef ctx) {
     (void) ctx;
 
+    resource_init_current_app(&FUZZY_TIME_ARABIC_RESOURCES);
+
     window_init(&s_data.window, "My Fuzzy Time");
     const bool animated = true;
     window_stack_push(&s_data.window, animated);
 
     window_set_background_color(&s_data.window, GColorBlack);
-    GFont hours_font = fonts_get_system_font(FONT_KEY_GOTHAM_42_BOLD);
-    GFont regular_font = fonts_get_system_font(FONT_KEY_GOTHIC_28);
+    GFont hours_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOLD_36));
+    GFont regular_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_LIGHT_28));
 
     int screen_width = s_data.window.layer.frame.size.w;
     text_layer_init(&s_data.hours, GRect(0, 5, screen_width, 45));
@@ -115,7 +116,7 @@ static void handle_init(AppContextRef ctx) {
     text_layer_init(&s_data.middles, GRect(0, 50, screen_width, 30));
     common_text_layer_init(&s_data.middles, regular_font);
 
-    text_layer_init(&s_data.offsets, GRect(0, 80, screen_width, 60));
+    text_layer_init(&s_data.offsets, GRect(0, 90, screen_width, 60));
     common_text_layer_init(&s_data.offsets, regular_font);
 
     PblTm t;
