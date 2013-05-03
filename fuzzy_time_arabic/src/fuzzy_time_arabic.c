@@ -11,7 +11,7 @@ PBL_APP_INFO(MY_UUID,
              APP_INFO_WATCH_FACE);
 
 static const char* const HOURS[] = {
-    "tna3esh",
+    "tna3sh",
     "we7de",
     "tenten",
     "tlete",
@@ -22,7 +22,7 @@ static const char* const HOURS[] = {
     "tmene",
     "tes3a",
     "3ashra",
-    "7da3esh"
+    "7da3sh"
 };
 
 static const char * const OFFSETS[] = {
