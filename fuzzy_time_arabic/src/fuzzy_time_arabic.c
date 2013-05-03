@@ -11,21 +11,91 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
-#define BUFFER_SIZE 40
+static const char* const HOURS[] = {
+    "tna3esh",
+    "we7de",
+    "tenten",
+    "tlete",
+    "arb3a",
+    "khamse",
+    "sette",
+    "sab3a",
+    "tmene",
+    "tes3a",
+    "3ashra",
+    "7da3esh"
+};
+
+static const char * const OFFSETS[] = {
+    "",
+    "khamse",
+    "3ashra",
+    "rebe3",
+    "telet",
+    "noss ella khamse",
+    "noss",
+    "noss w khamse",
+    "telet",
+    "rebe3",
+    "3ashra",
+    "khamse"
+};
+
+static const char* const STR_MINUS = "ella";
+static const char* const STR_AND = "w";
 
 static struct CommonWordsData {
-    TextLayer label;
+    TextLayer hours;
+    TextLayer offsets;
+    TextLayer middles;
     Window window;
-    char buffer[BUFFER_SIZE];
 } s_data;
 
 static void update_time(PblTm* t) {
-    fuzzy_time_to_words(t->tm_hour, t->tm_min, s_data.buffer, BUFFER_SIZE);
-    text_layer_set_text(&s_data.label, s_data.buffer);
+
+    int fuzzy_hours = t->tm_hour;
+    int fuzzy_minutes = ((t->tm_min + 2) / 5) * 5;
+
+    int positive_offset = 1;
+    if (fuzzy_minutes > 35){
+	positive_offset = 0;
+	fuzzy_hours += 1;
+    }
+
+    if (fuzzy_minutes > 55){
+	fuzzy_minutes = 0;
+    }
+
+    fuzzy_hours %= 12;
+    fuzzy_minutes /= 5;
+
+    const char * hour = HOURS[fuzzy_hours];
+    const char * middle = "";
+    const char * offset = "";
+    if (fuzzy_minutes > 0){
+	if (positive_offset){
+	    middle = STR_AND;
+	} else {
+	    middle = STR_MINUS;
+	}
+	offset = OFFSETS[fuzzy_minutes];
+    }
+
+    text_layer_set_text(&s_data.hours, hour);
+    text_layer_set_text(&s_data.offsets, offset);
+    text_layer_set_text(&s_data.middles, middle);
 }
 
 static void handle_minute_tick(AppContextRef app_ctx, PebbleTickEvent* e) {
     update_time(e->tick_time);
+}
+
+static void common_text_layer_init(TextLayer * layer, GFont font){
+    text_layer_set_background_color(layer, GColorClear);
+    text_layer_set_text_color(layer, GColorWhite);
+    text_layer_set_font(layer, font);
+    text_layer_set_text_alignment(layer, GTextAlignmentCenter);
+    layer_add_child(&s_data.window.layer, &layer->layer);
 }
 
 static void handle_init(AppContextRef ctx) {
@@ -36,13 +106,18 @@ static void handle_init(AppContextRef ctx) {
     window_stack_push(&s_data.window, animated);
 
     window_set_background_color(&s_data.window, GColorBlack);
-    GFont gotham = fonts_get_system_font(FONT_KEY_DROID_SERIF_28_BOLD);
+    GFont hours_font = fonts_get_system_font(FONT_KEY_GOTHAM_42_BOLD);
+    GFont regular_font = fonts_get_system_font(FONT_KEY_GOTHIC_28);
 
-    text_layer_init(&s_data.label, GRect(0, 20, s_data.window.layer.frame.size.w, s_data.window.layer.frame.size.h - 20));
-    text_layer_set_background_color(&s_data.label, GColorBlack);
-    text_layer_set_text_color(&s_data.label, GColorWhite);
-    text_layer_set_font(&s_data.label, gotham);
-    layer_add_child(&s_data.window.layer, &s_data.label.layer);
+    int screen_width = s_data.window.layer.frame.size.w;
+    text_layer_init(&s_data.hours, GRect(0, 5, screen_width, 45));
+    common_text_layer_init(&s_data.hours, hours_font);
+
+    text_layer_init(&s_data.middles, GRect(0, 50, screen_width, 30));
+    common_text_layer_init(&s_data.middles, regular_font);
+
+    text_layer_init(&s_data.offsets, GRect(0, 80, screen_width, 60));
+    common_text_layer_init(&s_data.offsets, regular_font);
 
     PblTm t;
     get_time(&t);
