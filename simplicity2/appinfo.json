@@ -1,0 +1,34 @@
+{
+  "uuid": "04073c9d-9240-4e2a-bbfc-b02f2f7eb0f5",
+  "shortName": "Simplicity 2",
+  "longName": "Simplicity with AM/PM",
+  "companyName": "Pebble Technology + Raja Baz",
+  "versionCode": 1,
+  "versionLabel": "1.0.1",
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {
+  },
+  "resources": {
+    "media": [
+      {
+        "menuIcon": true,
+        "type": "png",
+        "name": "IMAGE_MENU_ICON",
+        "file": "images/menu_icon_simplicity.png"
+      },
+      {
+        "type": "font",
+        "name": "FONT_ROBOTO_CONDENSED_21",
+        "file": "fonts/Roboto-Condensed.ttf"
+      },
+      {
+        "characterRegex": "[:0-9]",
+        "type": "font",
+        "name": "FONT_ROBOTO_BOLD_SUBSET_49",
+        "file": "fonts/Roboto-Bold.ttf"
+      }
+    ]
+  }
+}
