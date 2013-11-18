@@ -1,0 +1,27 @@
+{
+  "uuid": "2096fd9c-6942-4f5f-8ceb-f9a459f546b8",
+  "shortName": "Fuzzy Time Arabic",
+  "longName": "Fuzzy Time Arabic",
+  "companyName": "Raja Baz",
+  "versionCode": 1,
+  "versionLabel": "1.0.1",
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {
+  },
+  "resources": {
+    "media": [
+	{
+	    "type":"font",
+	    "name":"FONT_GOTHAM_BOLD_36",
+	    "file":"fonts/Gotham-Bold.ttf"
+	},
+	{
+	    "type":"font",
+	    "name":"FONT_GOTHAM_BOOK_28",
+	    "file":"fonts/Gotham-Book.ttf"
+	}
+    ]
+  }
+}

@@ -1,14 +1,4 @@
-#include "pebble_os.h"
-#include "pebble_app.h"
-#include "pebble_fonts.h"
-
-#define MY_UUID { 0x91, 0xC1, 0xDA, 0xB7, 0x5B, 0xA7, 0x45, 0xE7, 0xA7, 0x68, 0x78, 0xE8, 0x5C, 0xA6, 0x48, 0x16 }
-PBL_APP_INFO(MY_UUID,
-             "Arabic Fuzzy Time",
-             "Raja Baz",
-             1, 0, /* App version */
-             DEFAULT_MENU_ICON,
-             APP_INFO_WATCH_FACE);
+#include <pebble.h>
 
 static const char* const HOURS[] = {
     "tna3sh",
@@ -44,13 +34,13 @@ static const char* const STR_MINUS = "ella";
 static const char* const STR_AND = "w";
 
 static struct CommonWordsData {
-    TextLayer hours;
-    TextLayer offsets;
-    TextLayer middles;
-    Window window;
+    TextLayer * hours;
+    TextLayer * offsets;
+    TextLayer * middles;
+    Window * window;
 } s_data;
 
-static void update_time(PblTm* t) {
+static void update_time(struct tm* t) {
     int fuzzy_hours = t->tm_hour;
     int fuzzy_minutes = ((t->tm_min + 2) / 5) * 5;
 
@@ -79,13 +69,13 @@ static void update_time(PblTm* t) {
 	offset = OFFSETS[fuzzy_minutes];
     }
 
-    text_layer_set_text(&s_data.hours, hour);
-    text_layer_set_text(&s_data.offsets, offset);
-    text_layer_set_text(&s_data.middles, middle);
+    text_layer_set_text(s_data.hours, hour);
+    text_layer_set_text(s_data.offsets, offset);
+    text_layer_set_text(s_data.middles, middle);
 }
 
-static void handle_minute_tick(AppContextRef app_ctx, PebbleTickEvent* e) {
-    update_time(e->tick_time);
+static void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
+  update_time(tick_time);
 }
 
 static void common_text_layer_init(TextLayer * layer, GFont font){
@@ -93,47 +83,47 @@ static void common_text_layer_init(TextLayer * layer, GFont font){
     text_layer_set_text_color(layer, GColorWhite);
     text_layer_set_font(layer, font);
     text_layer_set_text_alignment(layer, GTextAlignmentCenter);
-    layer_add_child(&s_data.window.layer, &layer->layer);
+    layer_add_child(window_get_root_layer(s_data.window), text_layer_get_layer(layer));
 }
 
-static void handle_init(AppContextRef ctx) {
-    (void) ctx;
-
-    resource_init_current_app(&FUZZY_TIME_ARABIC_RESOURCES);
-
-    window_init(&s_data.window, "My Fuzzy Time");
+static void do_init(void) {
+    s_data.window = window_create();
     const bool animated = true;
-    window_stack_push(&s_data.window, animated);
+    window_stack_push(s_data.window, animated);
 
-    window_set_background_color(&s_data.window, GColorBlack);
+    window_set_background_color(s_data.window, GColorBlack);
     GFont hours_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOLD_36));
     GFont regular_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOOK_28));
 
-    int screen_width = s_data.window.layer.frame.size.w;
-    text_layer_init(&s_data.hours, GRect(0, 5, screen_width, 45));
-    common_text_layer_init(&s_data.hours, hours_font);
+    Layer *root_layer = window_get_root_layer(s_data.window);
+    GRect frame = layer_get_frame(root_layer);
 
-    text_layer_init(&s_data.middles, GRect(0, 50, screen_width, 30));
-    common_text_layer_init(&s_data.middles, regular_font);
+    int screen_width = frame.size.w;
+    s_data.hours = text_layer_create(GRect(0, 5, screen_width, 45));
+    common_text_layer_init(s_data.hours, hours_font);
 
-    text_layer_init(&s_data.offsets, GRect(0, 90, screen_width, 60));
-    common_text_layer_init(&s_data.offsets, regular_font);
+    s_data.middles = text_layer_create(GRect(0, 50, screen_width, 30));
+    common_text_layer_init(s_data.middles, regular_font);
 
-    PblTm t;
-    get_time(&t);
-    update_time(&t);
+    s_data.offsets = text_layer_create(GRect(0, 90, screen_width, 60));
+    common_text_layer_init(s_data.offsets, regular_font);
+
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    update_time(t);
+
+    tick_timer_service_subscribe(MINUTE_UNIT, &handle_minute_tick);
 }
 
+static void do_deinit(void) {
+  window_destroy(s_data.window);
+  text_layer_destroy(s_data.hours);
+  text_layer_destroy(s_data.middles);
+  text_layer_destroy(s_data.offsets);
+}
 
-void pbl_main(void *params) {
-    PebbleAppHandlers handlers = {
-        .init_handler = &handle_init,
-
-        .tick_info = {
-            .tick_handler = &handle_minute_tick,
-            .tick_units = MINUTE_UNIT
-        }
-
-    };
-    app_event_loop(params, &handlers);
+int main(void) {
+  do_init();
+  app_event_loop();
+  do_deinit();
 }
