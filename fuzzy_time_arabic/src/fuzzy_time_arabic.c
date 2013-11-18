@@ -112,14 +112,15 @@ static void do_init(void) {
     struct tm *t = localtime(&now);
     update_time(t);
 
-    tick_timer_service_subscribe(MINUTE_UNIT, &handle_minute_tick);
+    tick_timer_service_subscribe(MINUTE_UNIT, handle_minute_tick);
 }
 
 static void do_deinit(void) {
-  window_destroy(s_data.window);
-  text_layer_destroy(s_data.hours);
-  text_layer_destroy(s_data.middles);
-  text_layer_destroy(s_data.offsets);
+    tick_timer_service_unsubscribe();
+    window_destroy(s_data.window);
+    text_layer_destroy(s_data.hours);
+    text_layer_destroy(s_data.middles);
+    text_layer_destroy(s_data.offsets);
 }
 
 int main(void) {
