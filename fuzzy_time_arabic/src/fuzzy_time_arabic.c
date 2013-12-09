@@ -32,6 +32,8 @@ static const char * const OFFSETS[] = {
 
 static const char* const STR_MINUS = "ella";
 static const char* const STR_AND = "w";
+static GFont hours_font;
+static GFont regular_font;
 
 static struct CommonWordsData {
     TextLayer * hours;
@@ -92,8 +94,8 @@ static void do_init(void) {
     window_stack_push(s_data.window, animated);
 
     window_set_background_color(s_data.window, GColorBlack);
-    GFont hours_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOLD_36));
-    GFont regular_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOOK_28));
+    hours_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOLD_36));
+    regular_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_GOTHAM_BOOK_28));
 
     Layer *root_layer = window_get_root_layer(s_data.window);
     GRect frame = layer_get_frame(root_layer);
@@ -121,6 +123,8 @@ static void do_deinit(void) {
     text_layer_destroy(s_data.hours);
     text_layer_destroy(s_data.middles);
     text_layer_destroy(s_data.offsets);
+    fonts_unload_custom_font(hours_font);
+    fonts_unload_custom_font(regular_font);
 }
 
 int main(void) {

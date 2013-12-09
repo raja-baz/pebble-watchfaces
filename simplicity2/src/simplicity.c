@@ -6,6 +6,9 @@ TextLayer * text_time_layer;
 TextLayer * text_am_pm_layer;
 Layer * line_layer;
 
+GFont small_font;
+GFont large_font;
+
 #define TEXT_START_Y 48
 #define AM_PM_HIGH_OFFSET 52
 #define AM_PM_LOW_OFFSET 75
@@ -79,6 +82,8 @@ void handle_deinit(void){
     text_layer_destroy(text_time_layer);
     text_layer_destroy(text_am_pm_layer);
     layer_destroy(line_layer);
+    fonts_unload_custom_font(large_font);
+    fonts_unload_custom_font(small_font);
 }
 
 void handle_init(void) {
@@ -86,7 +91,8 @@ void handle_init(void) {
     window_stack_push(window, true /* Animated */);
     window_set_background_color(window, GColorBlack);
 
-    GFont small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21));
+    small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21));
+    large_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49));
 
     Layer * root_layer = window_get_root_layer(window);
     GRect frame = layer_get_frame(root_layer);
@@ -101,7 +107,7 @@ void handle_init(void) {
     text_layer_set_text_color(text_time_layer, GColorWhite);
     text_layer_set_background_color(text_time_layer, GColorClear);
     layer_set_frame(text_layer_get_layer(text_time_layer), GRect(7, TEXT_START_Y+24, 144-7, 168-(TEXT_START_Y+24)));
-    text_layer_set_font(text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49)));
+    text_layer_set_font(text_time_layer, large_font);
     layer_add_child(root_layer, text_layer_get_layer(text_time_layer));
 
     text_am_pm_layer = text_layer_create(frame);
